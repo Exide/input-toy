@@ -16,7 +16,9 @@ public class Spawner : MonoBehaviour {
             if (!pressed) continue;
 
             var symbol = buildSymbol(key);
-            Instantiate(symbol);
+            var position = new Vector3(0, 0, 0);
+            var rotation = Quaternion.identity;
+            Instantiate(symbol, position, rotation);
         }
     }
 
