@@ -13,7 +13,7 @@ public class Spawner : MonoBehaviour {
 
     private void Update() {
         foreach (var key in knownKeys) {
-            var pressed = Input.GetKey(key.ToString());
+            var pressed = Input.GetKeyDown(key.ToString());
             if (!pressed) continue;
 
             instantiateSymbol(key);
