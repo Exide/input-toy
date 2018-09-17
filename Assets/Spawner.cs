@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour {
     private const string KEY_LIST = "abcdefghijklmnopqrstuvwxyz";
+    public GameObject symbolPrefab;
     private List<char> knownKeys;
 
     private void Start() {
@@ -15,17 +16,15 @@ public class Spawner : MonoBehaviour {
             var pressed = Input.GetKey(key.ToString());
             if (!pressed) continue;
 
-            var symbol = buildSymbol(key);
-            var position = new Vector3(0, 0, 0);
-            var rotation = Quaternion.identity;
-            Instantiate(symbol, position, rotation);
+            instantiateSymbol(key);
         }
     }
 
-    private static GameObject buildSymbol(char symbol) {
-        var gameObject = new GameObject();
-        gameObject.AddComponent<TextMesh>().text = symbol.ToString();
-        gameObject.AddComponent<MeshRenderer>();
-        return gameObject;
+    private void instantiateSymbol(char symbol) {
+        var position = new Vector3(0, 0, 0);
+        var rotation = Quaternion.identity;
+        var obj = Instantiate(symbolPrefab, position, rotation);
+        var mesh = (TextMesh) obj.GetComponent(typeof(TextMesh));
+        mesh.text = symbol.ToString();
     }
 }
