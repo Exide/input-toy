@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour {
+public class SymbolSpawner : MonoBehaviour {
     private const string KEY_LIST = "abcdefghijklmnopqrstuvwxyz";
     public GameObject symbolPrefab;
     private List<char> knownKeys;
