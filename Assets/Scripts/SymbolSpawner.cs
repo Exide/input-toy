@@ -1,30 +1,21 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SymbolSpawner : MonoBehaviour {
-    private const string KEY_LIST = "abcdefghijklmnopqrstuvwxyz";
     public GameObject symbolPrefab;
-    private List<char> knownKeys;
-
-    private void Start() {
-        knownKeys = new List<char>(KEY_LIST);
-        Debug.Log(knownKeys);
-    }
 
     private void Update() {
-        foreach (var key in knownKeys) {
-            var pressed = Input.GetKeyDown(key.ToString());
-            if (!pressed) continue;
-
-            instantiateSymbol(key);
+        foreach (KeyCode keyCode in System.Enum.GetValues(typeof(KeyCode))) {
+            if (Input.GetKeyDown(keyCode)) {
+                instantiateSymbol(keyCode.ToString());
+            }
         }
     }
 
-    private void instantiateSymbol(char symbol) {
+    private void instantiateSymbol(string symbol) {
         var position = new Vector3(0, 0, 0);
         var rotation = Quaternion.identity;
         var obj = Instantiate(symbolPrefab, position, rotation);
         var mesh = (TextMesh) obj.GetComponent(typeof(TextMesh));
-        mesh.text = symbol.ToString();
+        mesh.text = symbol;
     }
 }
