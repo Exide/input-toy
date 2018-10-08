@@ -1,24 +1,24 @@
 ﻿using TMPro;
 using UnityEngine;
 
-public class SymbolSpawner : MonoBehaviour {
-    public GameObject symbolPrefab;
+public class TextSpawner : MonoBehaviour {
+    public GameObject textPrefab;
 
     private void Update() {
         foreach (KeyCode keyCode in System.Enum.GetValues(typeof(KeyCode))) {
             
             if (Input.GetKeyDown(keyCode)) {
-                instantiateSymbol(keyCode.ToString());
+                instantiateText(keyCode.ToString());
             }
         }
     }
 
-    private void instantiateSymbol(string symbol) {
+    private void instantiateText(string text) {
         var position = getRandomVisiblePosition();
         var rotation = Quaternion.identity;
-        var obj = Instantiate(symbolPrefab, position, rotation);
+        var obj = Instantiate(textPrefab, position, rotation);
         var mesh = (TextMeshPro) obj.GetComponent(typeof(TextMeshPro));
-        mesh.text = symbol;
+        mesh.text = text;
     }
 
     private Vector3 getRandomVisiblePosition() {
