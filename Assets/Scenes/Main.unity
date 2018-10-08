@@ -4898,7 +4898,7 @@ GameObject:
   - component: {fileID: 1610961077}
   - component: {fileID: 1610961076}
   m_Layer: 0
-  m_Name: SymbolSpawner
+  m_Name: TextSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4915,8 +4915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62e2c3edfda673741b8b77d706a2ccb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  symbolPrefab: {fileID: 1062290742833828, guid: b21213131af513c44a845d0b0cc9d765,
-    type: 2}
+  textPrefab: {fileID: 1062290742833828, guid: b21213131af513c44a845d0b0cc9d765, type: 2}
 --- !u!4 &1610961077
 Transform:
   m_ObjectHideFlags: 0
