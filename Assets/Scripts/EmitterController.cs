@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class EmitterController : MonoBehaviour {
 
 	private const int SCREEN_PADDING = 10;
 	
 	private void Start () {
-		if (!Input.mousePresent) {
+		if (!Input.mousePresent && !Input.touchSupported) {
 			gameObject.SetActive(false);
 		}
 	}
@@ -18,11 +19,29 @@ public class EmitterController : MonoBehaviour {
 
 	private void updateParticlePosition() {
 		if (Camera.main == null) throw new NoCameraException();
-		var mousePosition = Input.mousePosition;
-		mousePosition.x = Mathf.Clamp(mousePosition.x, SCREEN_PADDING, Screen.width - SCREEN_PADDING);
-		mousePosition.y = Mathf.Clamp(mousePosition.y, SCREEN_PADDING, Screen.height - SCREEN_PADDING);
-		mousePosition.z = Camera.main.farClipPlane - 1;
-		transform.position = Camera.main.ScreenToWorldPoint(mousePosition);
+		var pointerPosition = getPointerScreenSpacePosition();
+		if (!pointerPosition.HasValue) return;
+		transform.position = getPointerWorldSpacePosition(pointerPosition.Value);
+	}
+
+	private Vector3? getPointerScreenSpacePosition() {
+		if (Input.mousePresent) {
+			return Input.mousePosition;
+		}
+
+		if (Input.touchSupported && Input.touches.Length > 0) {
+			return Input.touches[0].position;
+		}
+
+		return null;
+	}
+
+	private Vector3 getPointerWorldSpacePosition(Vector3 screenPosition) {
+		var x = Mathf.Clamp(screenPosition.x, SCREEN_PADDING, Screen.width - SCREEN_PADDING);
+		var y = Mathf.Clamp(screenPosition.y, SCREEN_PADDING, Screen.height - SCREEN_PADDING);
+		var z = Camera.main.farClipPlane - 1;
+		var position = new Vector3(x, y, z);
+		return Camera.main.ScreenToWorldPoint(position);
 	}
 	
 	private void updateParticleColor() {
