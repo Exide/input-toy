@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 
 public class SymbolSpawner : MonoBehaviour {
     public GameObject symbolPrefab;
@@ -16,7 +17,7 @@ public class SymbolSpawner : MonoBehaviour {
         var position = getRandomVisiblePosition();
         var rotation = Quaternion.identity;
         var obj = Instantiate(symbolPrefab, position, rotation);
-        var mesh = (TextMesh) obj.GetComponent(typeof(TextMesh));
+        var mesh = (TextMeshPro) obj.GetComponent(typeof(TextMeshPro));
         mesh.text = symbol;
     }
 
