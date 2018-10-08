@@ -1,16 +1,85 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class TextSpawner : MonoBehaviour {
     public GameObject textPrefab;
 
+    private readonly List<string> ignoredKeyCodes = new List<string> {
+        "AltGr"
+    };
+
+    private readonly List<string> suffixTrimmedKeyCodes = new List<string> {
+        "Alpha",
+        "Keypad"
+    };
+
+    private readonly List<string> prefixTrimmedKeyCodes = new List<string> {
+        "Control",
+        "Shift",
+        "Alt",
+        "Command",
+        "Apple",
+        "Windows"
+    };
+
+    private readonly Dictionary<string, string> replacedKeyCodes = new Dictionary<string, string> {
+        {"Plus", "+"},
+        {"Minus", "-"},
+        {"Multiply", "*"},
+        {"Divide", "/"},
+        {"Period", "."},
+        {"Equals", "="},
+        {"BackQuote", "`"},
+        {"Exclaim", "!"},
+        {"At", "@"},
+        {"Hash", "#"},
+        {"Dollar", "$"},
+        {"Caret", "^"},
+        {"Ampersand", "&"},
+        {"LeftParen", "("},
+        {"RightParen", ")"},
+        {"Underscore", "_"},
+        {"LeftBracket", "["},
+        {"RightBracket", "]"},
+        {"Backslash", "\\"},
+        {"Semicolon", ";"},
+        {"Quote", "'"},
+        {"Comma", ","},
+        {"Slash", "/"}
+    };
+
     private void Update() {
         foreach (KeyCode keyCode in System.Enum.GetValues(typeof(KeyCode))) {
-            
-            if (Input.GetKeyDown(keyCode)) {
-                instantiateText(keyCode.ToString());
+            if (!Input.GetKeyDown(keyCode)) continue;
+            Debug.Log(keyCode);
+            if (ignoredKeyCodes.Contains(keyCode.ToString())) continue;
+            var text = buildTextFromKeyCode(keyCode);
+            instantiateText(text);
+        }
+    }
+
+    private string buildTextFromKeyCode(KeyCode keyCode) {
+        var text = keyCode.ToString();
+
+        foreach (var code in prefixTrimmedKeyCodes) {
+            if (text.Contains(code)) {
+                text = code;
             }
         }
+
+        foreach (var code in suffixTrimmedKeyCodes) {
+            if (text.StartsWith(code)) {
+                text = text.Substring(code.Length);
+            }
+        }
+
+        if (replacedKeyCodes.ContainsKey(text)) {
+            text = replacedKeyCodes[text];
+        }
+
+        return text;
     }
 
     private void instantiateText(string text) {
