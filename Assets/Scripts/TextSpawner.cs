@@ -53,7 +53,6 @@ public class TextSpawner : MonoBehaviour {
     private void Update() {
         foreach (KeyCode keyCode in System.Enum.GetValues(typeof(KeyCode))) {
             if (!Input.GetKeyDown(keyCode)) continue;
-            Debug.Log(keyCode);
             if (ignoredKeyCodes.Contains(keyCode.ToString())) continue;
             var text = buildTextFromKeyCode(keyCode);
             instantiateText(text);
