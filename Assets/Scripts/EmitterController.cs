@@ -45,7 +45,7 @@ public class EmitterController : MonoBehaviour {
 	}
 	
 	private void updateParticleColor() {
-		var mouseWheelDelta = Input.GetAxis("Mouse ScrollWheel");
+		var mouseWheelDelta = Input.GetAxis("Mouse ScrollWheel") / 10;
 		if (mouseWheelDelta == 0) return;
 		var particleSettings = GetComponent<ParticleSystem>().main;
 		particleSettings.startColor = modifyHue(particleSettings.startColor.color, mouseWheelDelta);
