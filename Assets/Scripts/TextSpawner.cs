@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -50,12 +52,29 @@ public class TextSpawner : MonoBehaviour {
         {"Slash", "/"}
     };
 
+    private Dictionary<KeyCode, GameObject> pressedKeys = new Dictionary<KeyCode, GameObject>();
+
     private void Update() {
         foreach (KeyCode keyCode in System.Enum.GetValues(typeof(KeyCode))) {
-            if (!Input.GetKeyDown(keyCode)) continue;
+            
+            // skip ignored key codes
             if (ignoredKeyCodes.Contains(keyCode.ToString())) continue;
-            var text = buildTextFromKeyCode(keyCode);
-            instantiateText(text);
+
+            // instantiate text object on key down
+            if (Input.GetKeyDown(keyCode)) {
+                if (pressedKeys.ContainsKey(keyCode)) continue;
+                var text = buildTextFromKeyCode(keyCode);
+                GameObject textObject = instantiateText(text);
+                pressedKeys.Add(keyCode, textObject);
+            }
+
+            // destroy text object on key up
+            if (Input.GetKeyUp(keyCode)) {
+                if (!pressedKeys.ContainsKey(keyCode)) continue;
+                Destroy(pressedKeys[keyCode]);
+                pressedKeys.Remove(keyCode);
+            }
+            
         }
     }
 
@@ -81,12 +100,13 @@ public class TextSpawner : MonoBehaviour {
         return text;
     }
 
-    private void instantiateText(string text) {
+    private GameObject instantiateText(string text) {
         var position = getRandomVisiblePosition();
         var rotation = Quaternion.identity;
         var obj = Instantiate(textPrefab, position, rotation);
         var mesh = (TextMeshPro) obj.GetComponent(typeof(TextMeshPro));
         mesh.text = text;
+        return obj;
     }
 
     private Vector3 getRandomVisiblePosition() {
